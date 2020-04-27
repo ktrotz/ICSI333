@@ -1,0 +1,31 @@
+
+# 1st Int
+addi $v0, $zero, 5 # 5 indicates read integer system call
+syscall		# execute system call
+add $t0, $zero, $v0 # put the results in $t0
+
+# 2nd Int
+addi $v0, $zero, 5 # 5 indicates read integer system call
+syscall		# execute system call
+add $t1, $zero, $v0 # put the results in $t0
+
+#Find larger
+ble $t0, $t1 cond1 #if t0 <= t1
+
+cond2:
+# Display Int to console
+addi $v0, $zero, 1 # 1 indicates display integer system call
+add $a0, $t0, $zero # value to be displayed 
+syscall	
+
+j end
+
+cond1:
+# Display Int to console
+addi $v0, $zero, 1 # 1 indicates display integer system call
+add $a0, $t1, $zero # value to be displayed 
+syscall	
+
+end:
+	 
+	 

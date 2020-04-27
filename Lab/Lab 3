@@ -1,0 +1,32 @@
+
+
+
+addi $t2, $zero, 128 # end 
+addi $t3, $zero, 2 # base
+
+li $t1, 1 # Initiate t1 to 1
+li $v0, 1 # Print integer
+syscall
+
+#bne $t1, $t2, Loop # If t1 not equal to 128 go to Loop
+
+
+#Increment
+Loop:
+#addi $t0, $t0, 1 #loop counter
+sll $t1, $t1, 1
+
+add $a0, $t1, $zero # Load contents of variable i onto register a0
+li $v0, 1 # Print integer
+syscall
+
+ # If t1 = 128, the Exit
+bne $t1, $t2, Loop
+
+
+
+
+
+
+
+

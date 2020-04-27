@@ -1,0 +1,15 @@
+
+
+add $t0, $zero, 1  #sets t0 to 0 + 1 = 1
+add $t1, $zero, 1 
+
+add $t2, $t0, $t1  # 1+1=2
+add $t3, $t1, $t2  # 1+2=3
+add $t4, $t2, $t3  # 2+3=5
+add $t5, $t3, $t4  # 3+5=8
+add $t6, $t4, $t5  # 5+8=13
+add $t7, $t5, $t6  # 8+13=21
+add $t8, $t6, $t7  #
+add $s0, $t7, $t8  #
+add $s1, $t8, $s0  #
+add $s2, $s0, $s1  #

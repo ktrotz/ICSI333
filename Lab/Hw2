@@ -1,0 +1,109 @@
+
+.data  # variable declarartions follow this line...
+.align 4  #????
+
+Table: .space 24 # allocate storage space for uninitialized array variables
+
+msg1: .asciiz "Please insert an integer: "
+msg2: .asciiz " "
+msg3: .asciiz "\nVector contents: "
+
+.text  # instruction follow this line
+
+.globl main # means that main can be referenced from other files, like public (probably not necessary)
+
+main: # main identifies the start of the code (.text)
+
+addi $s0, $zero, 5 # s0 = 5 (table size)
+addi $t0, $zero, 0 # t0 = 0
+### I think t0 is a poniter 
+
+in:
+li $v0, 4 # system call to print string
+la $a0, msg1 # load address of msg1
+syscall
+
+li $v0, 5 # system call to read integer
+syscall
+
+##### 1. pointers t0 and t1 are set to zero. 
+##### 2. Then t0 gets set to 1 and t1 gets shifted to position 2
+##### 3. This ????
+
+add $t1, $t0, $zero # t1 = 0
+sll $t1, $t0, 2 # multiply pointer t0 by 4 and store in t1
+
+add $t3, $v0, $zero # t3 = input integer
+sw $t3, Table($t1) # store t3 in address of t1
+
+addi $t0, $t0, 1 # increment pointer
+slt $t1, $s0, $t0 # if s0(table size) < t0(pointer) then t1 = 1 (true)-- (like loop counter)
+beq $t1, $zero, in # if t1 = 0 go to input
+
+la $a0, Table # array Table address loaded to a0
+addi $a1, $s0, 1 # a1 = 5 + 1 = 6
+
+#call buble_sort
+jal bubble_sort 
+
+#print table
+li $v0,4
+la $a0,msg3
+syscall
+la $t0,Table
+#s0=5
+add $t1,$zero,$zero
+printtable:
+lw $a0,0($t0)
+li $v0,1
+syscall
+li $v0,4
+la $a0,msg2
+syscall
+addi $t0,$t0,4
+addi $t1,$t1,1
+slt $t2,$s0,$t1
+beq $t2,$zero,printtable
+
+li $v0,10
+syscall
+
+# Call starts here 
+bubble_sort:
+# a0 = address of table
+# a1 = size of table + 1
+
+
+add $t0, $zero, $zero # counter1 t0 = 0
+
+loop1:
+addi $t0, $t0, 1 # increment loop
+bgt $t0, $a1, endloop1 #if counter t0 is more then the array size a1 then go to endloop1
+add $t1, $a1, $zero #counter2 = size of array 
+
+#t1 = size of table + 1
+
+loop2:
+bge $t0, $t1, loop1 # if counter1 t0 is more than or equal to counter2 t1 then go to loop1
+
+#slt $t3,$t1,$t0
+#bne $t3,$zero,loop1
+
+addi $t1 , $t1, -1 #decrement counter2 t1 size of array--
+
+mul $t4, $t1, 4 #t4+a0=table[j]   t4 = 5x4 =20
+addi $t3, $t4, -4 #t3+a0=table[j-1]   t3 = 20 - 4 = 16
+add $t7, $t4, $a0 #t7=table[j]   t7 = 20 + array base address
+add $t8, $t3, $a0 #t8=table[j-1]   t8 = 16 + array base address
+lw $t5, 0($t7) # load t7 20 + base into t5 
+lw $t6, 0($t8) # load t8 16 + base into t6 
+
+bgt $t5, $t6,loop2 #if t5 > 6 go to next nums
+
+#switch t5,t6
+sw $t5, 0($t8) #  save 20 + base into 16 + base address
+sw $t6, 0($t7) # save 16 + base into 20 + base address
+j loop2
+
+endloop1:
+jr $ra

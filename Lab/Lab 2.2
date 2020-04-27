@@ -1,0 +1,38 @@
+
+# Random Num 
+li $v0, 42 # 42 is a system call code to generate random int
+li $a1, 100 # $a1 is where you set the upper bound
+syscall	   #random num at $a0
+
+
+# User input
+user:
+addi $v0, $zero, 5 # 5 indicates read integer system call
+syscall		# execute system call
+add $t0, $zero, $v0 # put the results in $t0
+
+cond1:
+ble $t0, $a0 lower #if t0 <= a0; a0 is the random num
+
+cond2:
+ble $a0, $t0 higher
+
+
+lower:
+#Display an ASCII character 
+add $a0, $zero, 76 # 76 is the ASCII number for 'L'
+add $v0, $zero, 11 # syscall number for printing character
+syscall
+
+higher:
+add $a0, $zero, 72 # 72 is the ASCII number for 'H'
+add $v0, $zero, 11
+syscall
+
+correct:
+add $a0, $zero, 67 # 67 is the ASCII number for 'C'
+add $v0, $zero, 11 
+syscall
+
+end:
+

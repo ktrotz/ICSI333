@@ -1,0 +1,39 @@
+
+add $t2, $zero, $sp # Save the SP address to t2
+#add $s0, $zero, $zero #pointer
+add $t0, $zero, $zero #loop counter
+addi $t1, $zero, 10 #end loop
+
+#Read Int from user
+Loop:
+addi $v0, $zero, 5
+syscall 
+sw $v0, 0($t2) #stack pointer
+subi $t1, $t1, 1
+addi $t2, $t2, 4 #s0 increments by four
+bne $t1, $zero, Loop
+
+add $s0, $zero, $zero #pointer
+add $t0, $zero, $zero #loop counter
+addi $t1, $zero, 10 #end loop
+add $t2, $zero, $sp
+
+Greater:
+lw $a0, 0($t2) #set as largest to compare
+addi $t2, $t2, 4 
+lw $a1, 0($t2) 
+sgt $t3, $a0, $a1 #t3 = true id a0 > a1
+beq $t3, $zero, SetG
+add, $t6, $zero, $a0
+subi $t1, $zero, 1
+beq, $t0, $t1, Display
+
+SetG:
+add $t6, $zero, $a1
+j Greater
+
+Display:
+add $a0, $zero, $t6
+li $v0, 1
+syscall
+

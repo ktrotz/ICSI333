@@ -1,0 +1,32 @@
+
+#sw $v0, 0($t2)
+#add $t2, $t2, 4
+
+add $t2, $zero, $sp # Save the SP address to t2
+#add $s0, $zero, $zero #pointer
+add $t0, $zero, $zero #loop counter
+addi $t1, $zero, 10 #end loop
+
+#Read Int from user
+Loop:
+addi $v0, $zero, 5
+syscall 
+sw $v0, 0($t2) #stack pointer
+subi $t1, $t1, 1
+addi $t2, $t2, 4 #s0 increments by four
+bne $t1, $zero, Loop
+#bne $t0, $t1, Loop
+
+add $s0, $zero, $zero #pointer
+add $t0, $zero, $zero #loop counter
+addi $t1, $zero, 10 #end loop
+add $t2, $zero, $sp
+
+#Read Load from memory and display it
+Display:
+lw $a0, 0($t2)
+li $v0, 1
+syscall
+addi $t2, $t2, 4 #s0 increments by four
+subi $t1, $t1, 1
+bne $t0, $t1, Display
